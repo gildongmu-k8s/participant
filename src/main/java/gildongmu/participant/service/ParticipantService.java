@@ -1,4 +1,5 @@
 package gildongmu.participant.service;
+
 import gildongmu.participant.adapter.PostAdapter;
 import gildongmu.participant.adapter.UserAdapter;
 import gildongmu.participant.domain.participant.constant.Status;
@@ -42,8 +43,8 @@ public class ParticipantService {
         participantRepository.save(Participant.builder()
                 .isLeader(false)
                 .status(Status.PENDING)
-                        .userId(user.getId())
-                        .postId(postId)
+                .userId(user.getId())
+                .postId(postId)
                 .build());
     }
 
@@ -52,7 +53,7 @@ public class ParticipantService {
         Participant participant = participantRepository.findByUserIdAndPostIdAndStatusIsNot(user.getId(), postId, Status.DELETED)
                 .orElseThrow(() -> new ParticipantException(ErrorCode.PARTICIPANT_NOT_FOUND));
 
-        if(Status.ACCEPTED.equals(participant.getStatus()))
+        if (Status.ACCEPTED.equals(participant.getStatus()))
             roomRepository.findByPostId(postId)
                     .ifPresent(Room::minusHeadCount);
         participant.delete();
@@ -75,7 +76,7 @@ public class ParticipantService {
                 .stream().filter(participant -> Objects.equals(participant.getPostId(), postId))
                 .findFirst().orElseThrow(() -> new ParticipantException(ErrorCode.PARTICIPANT_NOT_FOUND));
 
-        if(Status.ACCEPTED.equals(participantToBeDeleted.getStatus()))
+        if (Status.ACCEPTED.equals(participantToBeDeleted.getStatus()))
             roomRepository.findByPostId(postId)
                     .ifPresent(Room::minusHeadCount);
         participantToBeDeleted.delete();
@@ -87,10 +88,10 @@ public class ParticipantService {
         Post post = postAdapter.getPost(postId);
         User user = userAdapter.getUserInfoFromToken(token);
 
-        if(!Objects.equals(post.getStatus(), PostStatus.OPEN))
+        if (!Objects.equals(post.getStatus(), PostStatus.OPEN))
             throw new PostException(ErrorCode.POST_NOT_FOUND);
 
-        if(!Objects.equals(post.getUserId(), user.getId()))
+        if (!Objects.equals(post.getUserId(), user.getId()))
             throw new PostException(ErrorCode.POST_NOT_FOUND);
 
         Participant participantToBeAccepted = participantRepository.findById(participantId)
@@ -142,7 +143,7 @@ public class ParticipantService {
 
     private List<ParticipantResponse> retrieveAcceptedParticipants(Long postId, User user) {
         validateParticipantUser(user.getId(), postId);
-        return participantRepository.findByPostIdAndStatusOrPostIdAndUserId(postId, Status.ACCEPTED, postId, user)
+        return participantRepository.findByPostIdAndStatusOrPostIdAndUserId(postId, Status.ACCEPTED, postId, user.getId())
                 .stream().map(participant -> ParticipantResponse.from(participant, user.getId()))
                 .sorted((o1, o2) -> {
                     if (o1.user().isCurrentUser() == o2.user().isCurrentUser())
