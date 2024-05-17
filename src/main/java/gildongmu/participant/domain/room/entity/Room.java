@@ -1,6 +1,7 @@
 package gildongmu.participant.domain.room.entity;
 
 import gildongmu.participant.domain.BaseTimeEntity;
+import gildongmu.participant.dto.transfer.Post;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,6 +30,9 @@ public class Room extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDate endDate;
 
+    @Transient
+    private Post post;
+
     @Builder
     public Room(Integer headcount, Long postId, LocalDate startDate, LocalDate endDate) {
         this.headcount = headcount;
@@ -43,5 +47,9 @@ public class Room extends BaseTimeEntity {
 
     public void minusHeadCount() {
         headcount--;
+    }
+
+    public void addPost(Post post){
+        this.post = post;
     }
 }

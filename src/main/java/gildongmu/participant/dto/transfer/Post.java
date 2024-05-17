@@ -2,8 +2,6 @@ package gildongmu.participant.dto.transfer;
 
 import lombok.*;
 
-import java.util.Objects;
-
 @Getter
 @Setter
 @Builder
@@ -14,4 +12,16 @@ public class Post {
     private Long userId;
     private PostStatus status;
     private Short numberOfPeople;
+    private String title;
+    private Image thumbnail;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class Image {
+        private Long id;
+        private String url;
+    }
 }

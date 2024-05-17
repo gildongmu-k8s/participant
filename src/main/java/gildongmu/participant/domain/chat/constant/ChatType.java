@@ -1,4 +1,4 @@
-package gildongmu.participant.dto.transfer;
+package gildongmu.participant.domain.chat.constant;
 
 public enum ChatType {
     MESSAGE, IMAGE, INFO;
