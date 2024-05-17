@@ -49,7 +49,8 @@ public class ParticipantService {
     }
 
     @Transactional
-    public void exitParticipant(Long postId, User user) {
+    public void exitParticipant(Long postId, String token) {
+        User user = userAdapter.getUserInfoFromToken(token);
         Participant participant = participantRepository.findByUserIdAndPostIdAndStatusIsNot(user.getId(), postId, Status.DELETED)
                 .orElseThrow(() -> new ParticipantException(ErrorCode.PARTICIPANT_NOT_FOUND));
 
@@ -69,7 +70,8 @@ public class ParticipantService {
     }
 
     @Transactional
-    public void denyParticipant(Long postId, Long participantId, User user) {
+    public void denyParticipant(Long postId, Long participantId, String token) {
+        User user = userAdapter.getUserInfoFromToken(token);
         validateLeaderUser(user.getId(), postId);
 
         Participant participantToBeDeleted = participantRepository.findById(participantId)
