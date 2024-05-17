@@ -32,6 +32,10 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.hibernate:hibernate-validator:8.0.1.Final")
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
+    runtimeOnly("com.mysql:mysql-connector-j")
 }
 
 dependencyManagement {
